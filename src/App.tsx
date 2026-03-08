@@ -13,6 +13,7 @@ import AgentProfile from "./pages/AgentProfile";
 import Dashboard from "./pages/Dashboard";
 import Verify from "./pages/Verify";
 import Agents from "./pages/Agents";
+import Docs from "./pages/Docs";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
