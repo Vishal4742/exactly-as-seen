@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { WalletProvider } from "@/hooks/useWallet";
 import Navbar from "@/components/Navbar";
+import CustomCursor from "@/components/CustomCursor";
+import CornerTelemetry from "@/components/CornerTelemetry";
 import Index from "./pages/Index";
 import Register from "./pages/Register";
 import AgentProfile from "./pages/AgentProfile";
@@ -20,6 +22,8 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner position="top-right" />
+        <CustomCursor />
+        <CornerTelemetry />
         <BrowserRouter>
           <Navbar />
           <div className="pt-16">
