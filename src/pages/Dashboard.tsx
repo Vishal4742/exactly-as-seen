@@ -24,11 +24,53 @@ function MiniGauge({ score }: { score: number }) {
   );
 }
 
+/* ── Mock chart data ── */
+function generateDays(n: number, baseDate = new Date()) {
+  return Array.from({ length: n }, (_, i) => {
+    const d = new Date(baseDate);
+    d.setDate(d.getDate() - (n - 1 - i));
+    return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+  });
+}
+
+const REPUTATION_DATA = generateDays(30).map((date, i) => ({
+  date,
+  score: Math.round(720 + Math.sin(i * 0.4) * 40 + i * 1.8 + Math.random() * 15),
+}));
+
+const TRANSACTIONS_DATA = generateDays(14).map((date, i) => ({
+  date,
+  txns: Math.round(8 + Math.random() * 22 + Math.sin(i * 0.7) * 6),
+}));
+
+const VOLUME_DATA = generateDays(30).map((date, i) => ({
+  date,
+  usdc: Math.round(1200 + Math.sin(i * 0.5) * 600 + i * 80 + Math.random() * 400),
+}));
+
+const CHART_TOOLTIP_STYLE = {
+  contentStyle: {
+    background: "hsl(220 18% 6%)",
+    border: "1px solid hsl(220 15% 13%)",
+    borderRadius: 0,
+    fontSize: 11,
+    fontFamily: "JetBrains Mono, monospace",
+    color: "hsl(210 15% 92%)",
+    padding: "6px 10px",
+  },
+  cursor: { stroke: "hsl(220 15% 20%)", strokeWidth: 1 },
+};
+
 export default function Dashboard() {
   const { connected, publicKey, connect, connecting } = useWallet();
   const [pausedAgents, setPausedAgents] = useState<Set<string>>(new Set());
   const [spendingLimit, setSpendingLimit] = useState(5000);
   const [perTxLimit, setPerTxLimit] = useState(1000);
+
+  // stable mock data
+  const reputationData  = useMemo(() => REPUTATION_DATA, []);
+  const transactionData = useMemo(() => TRANSACTIONS_DATA, []);
+  const volumeData      = useMemo(() => VOLUME_DATA, []);
 
   const userAgents = MOCK_AGENTS.slice(0, 3);
 
