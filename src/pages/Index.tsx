@@ -59,6 +59,7 @@ export default function Index() {
 
   return (
     <div className="bg-background text-foreground">
+      <OnboardingModal />
 
       {/* ═══════════════════════════════════════════
           HERO — full viewport, reference layout
