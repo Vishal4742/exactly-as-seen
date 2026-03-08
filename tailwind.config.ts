@@ -8,14 +8,13 @@ export default {
     container: {
       center: true,
       padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
+      screens: { "2xl": "1400px" },
     },
     extend: {
       fontFamily: {
         sans: ["Inter", "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
+        serif: ["Georgia", "Times New Roman", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -61,7 +60,6 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // AgentID custom palette
         green: {
           DEFAULT: "hsl(var(--green))",
           dim: "hsl(var(--green-dim))",
@@ -75,8 +73,12 @@ export default {
       },
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        md: "var(--radius)",
+        sm: "var(--radius)",
+        full: "9999px",
+      },
+      letterSpacing: {
+        widest2: "0.12em",
       },
       keyframes: {
         "accordion-down": {
@@ -88,19 +90,19 @@ export default {
           to: { height: "0" },
         },
         "pulse-green": {
-          "0%, 100%": { boxShadow: "0 0 10px hsl(var(--green) / 0.4)" },
-          "50%": { boxShadow: "0 0 25px hsl(var(--green) / 0.8), 0 0 50px hsl(var(--green) / 0.3)" },
+          "0%, 100%": { boxShadow: "0 0 8px hsl(var(--green) / 0.3)" },
+          "50%": { boxShadow: "0 0 22px hsl(var(--green) / 0.7), 0 0 44px hsl(var(--green) / 0.2)" },
         },
         "flow-right": {
           "0%": { transform: "translateX(-100%)", opacity: "0" },
           "50%": { opacity: "1" },
           "100%": { transform: "translateX(100%)", opacity: "0" },
         },
-        "float": {
+        float: {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-6px)" },
         },
-        "scan": {
+        scan: {
           "0%": { top: "0%" },
           "100%": { top: "100%" },
         },
@@ -110,8 +112,8 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         "pulse-green": "pulse-green 2s ease-in-out infinite",
         "flow-right": "flow-right 2s linear infinite",
-        "float": "float 3s ease-in-out infinite",
-        "scan": "scan 3s linear infinite",
+        float: "float 3s ease-in-out infinite",
+        scan: "scan 3s linear infinite",
       },
     },
   },
