@@ -17,7 +17,7 @@ export default function Navbar() {
     { label: "Agents", href: "/agents" },
     { label: "Verify", href: "/verify" },
     { label: "Dashboard", href: "/dashboard" },
-    { label: "Docs", href: "#docs" },
+    { label: "Docs", href: "/docs" },
   ];
 
   const handleCopyAddress = () => {
