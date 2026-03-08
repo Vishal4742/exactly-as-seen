@@ -5,6 +5,8 @@ import {
   CheckCircle2, XCircle, Globe, Code2, Layers, Activity
 } from "lucide-react";
 import { MOCK_AGENTS } from "@/data/mockAgents";
+import AsciiCanvas from "@/components/AsciiCanvas";
+import ScrambleText from "@/components/ScrambleText";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -28,55 +30,119 @@ function ReputationMini({ score }: { score: number }) {
 export default function Index() {
   return (
     <div className="min-h-screen bg-background">
-      {/* ── Hero ── */}
-      <section className="relative overflow-hidden pt-20 pb-32 gradient-hero">
-        {/* Grid bg */}
-        <div className="absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: "linear-gradient(hsl(var(--green)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--green)) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
 
-        <div className="max-w-7xl mx-auto px-6 relative">
-          <motion.div initial="hidden" animate="visible" className="max-w-4xl mx-auto text-center">
-            <motion.div variants={fadeUp} custom={0} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-green/30 bg-green/10 text-green text-xs font-mono mb-8">
+      {/* ── Hero: ASCII Canvas ── */}
+      <section className="relative flex flex-col" style={{ height: "100vh" }}>
+
+        {/* ASCII canvas fills top ~65% */}
+        <div className="flex-1 relative border-b border-border/40 overflow-hidden">
+          <AsciiCanvas />
+
+          {/* Corner labels */}
+          <div className="absolute top-20 left-6 z-10 pointer-events-none select-none hidden md:block">
+            <span className="font-bold text-2xl text-foreground/80 tracking-tight">A</span>
+          </div>
+          <div className="absolute top-20 right-6 z-10 pointer-events-none select-none hidden md:block">
+            <span className="font-bold text-2xl text-foreground/80 tracking-tight">I</span>
+          </div>
+
+          {/* Grant badge */}
+          <div className="absolute top-20 left-1/2 -translate-x-1/2 z-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-green/30 bg-background/60 backdrop-blur-sm text-green text-xs font-mono">
               <div className="w-1.5 h-1.5 rounded-full bg-green animate-pulse" />
-              Solana Foundation Grant Application · KYA Protocol
-            </motion.div>
+              Solana Foundation Grant · KYA Protocol
+            </div>
+          </div>
 
-            <motion.h1 variants={fadeUp} custom={1} className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] mb-6">
-              Every AI agent{" "}
-              <br className="hidden sm:block" />
-              <span className="text-gradient-green">needs an identity.</span>
-            </motion.h1>
+          {/* Hero text pinned to bottom-left, reference style */}
+          <div className="absolute bottom-8 left-6 z-10 max-w-2xl">
+            <ScrambleText
+              as="h1"
+              text="Every AI agent needs an identity."
+              className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05] mb-3 cursor-default"
+              autoPlay
+              autoPlayDelay={300}
+            />
+            <p className="font-mono text-xs text-muted-foreground">
+              Soul-bound cNFT credentials · On-chain reputation · Solana devnet
+            </p>
+          </div>
 
-            <motion.p variants={fadeUp} custom={2} className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-              AgentID is a decentralised Know-Your-Agent protocol on Solana. Soul-bound cNFT credentials,
-              on-chain reputation, and real-time capability attestation for autonomous AI agents.
-            </motion.p>
+          {/* Gradient fade at bottom */}
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+        </div>
 
-            <motion.div variants={fadeUp} custom={3} className="flex flex-col sm:flex-row gap-3 justify-center">
+        {/* Info panel: bottom ~35% */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-6 py-6 border-b border-border/40 bg-background/95 backdrop-blur-sm" style={{ minHeight: "30vh" }}>
+
+          {/* Col 1: description */}
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground uppercase tracking-widest">
+              <span>AgentID Protocol</span>
+              <span className="text-green/50">·</span>
+              <span>v0.1 devnet</span>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
+              Decentralised Know-Your-Agent protocol on Solana. Every autonomous AI agent
+              gets a verifiable, soul-bound on-chain identity — with reputation, spending guards,
+              and India TDS compliance built in.
+            </p>
+            <p className="text-xs text-muted-foreground/50 mt-auto font-mono">
+              Open-source · Apache 2.0 · Permissionless
+            </p>
+          </div>
+
+          {/* Col 2: CTAs + live stats */}
+          <div className="flex flex-col gap-5">
+            <div className="flex flex-wrap gap-2">
               <Link to="/register"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-green text-primary-foreground font-semibold text-sm hover:bg-green/90 transition-all glow-green-sm">
-                <Zap className="w-4 h-4" /> Register Your Agent
+                className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-green text-primary-foreground font-semibold text-sm hover:bg-green/90 transition-all glow-green-sm">
+                <Zap className="w-4 h-4" />
+                <ScrambleText as="span" text="Register Agent" />
               </Link>
               <Link to="/agent/agent-001"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-border text-foreground font-medium text-sm hover:border-green/50 hover:text-green transition-colors">
-                View Demo Agent <ArrowRight className="w-4 h-4" />
+                className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-border text-foreground font-medium text-sm hover:border-green/50 hover:text-green transition-colors">
+                <ScrambleText as="span" text="View Demo" />
+                <ArrowRight className="w-4 h-4" />
               </Link>
-            </motion.div>
+            </div>
 
-            {/* Live stats */}
-            <motion.div variants={fadeUp} custom={4} className="mt-16 grid grid-cols-3 gap-4 max-w-lg mx-auto">
+            <div className="grid grid-cols-3 gap-3">
               {[
-                { label: "Agents Registered", value: "1,247" },
-                { label: "Avg Reputation", value: "764 / 1k" },
-                { label: "Tx Attested", value: "$14.2M" },
+                { label: "Agents", value: "1,247" },
+                { label: "Avg Rep", value: "764" },
+                { label: "Tx Value", value: "$14M" },
               ].map((s) => (
-                <div key={s.label} className="text-center">
-                  <div className="text-2xl font-bold text-green font-mono">{s.value}</div>
-                  <div className="text-xs text-muted-foreground mt-1">{s.label}</div>
+                <div key={s.label}>
+                  <div className="text-xl font-bold text-green font-mono">{s.value}</div>
+                  <div className="text-xs text-muted-foreground">{s.label}</div>
                 </div>
               ))}
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
+
+          {/* Col 3: nav links with slide-underline */}
+          <div className="flex flex-col justify-between">
+            <ul className="space-y-2">
+              {[
+                { label: "Verify any agent", href: "/verify" },
+                { label: "Owner Dashboard", href: "/dashboard" },
+                { label: "View on GitHub", href: "https://github.com" },
+                { label: "Documentation", href: "#docs" },
+              ].map(({ label, href }) => (
+                <li key={label}>
+                  <Link to={href}
+                    className="group relative text-sm text-muted-foreground hover:text-foreground transition-colors inline-block w-fit">
+                    {label}
+                    <span className="absolute bottom-0 left-0 w-full h-px bg-foreground scale-x-0 origin-right group-hover:scale-x-100 group-hover:origin-left transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p className="text-xs font-mono text-muted-foreground/30 mt-4 hidden md:block">
+              © 2025 AgentID
+            </p>
+          </div>
         </div>
       </section>
 
@@ -188,10 +254,6 @@ export default function Index() {
                   </div>
                   <p className="text-sm text-muted-foreground">{item.desc}</p>
                 </div>
-                {/* Animated connector */}
-                {i < 3 && (
-                  <div className="absolute left-[3.25rem] mt-[3.5rem] w-px h-3 bg-border" />
-                )}
               </motion.div>
             ))}
           </div>
@@ -206,8 +268,9 @@ export default function Index() {
             <h2 className="text-2xl sm:text-3xl font-bold mb-2">Live Registered Agents</h2>
             <p className="text-sm text-muted-foreground">Agents with active AgentID credentials on Solana devnet</p>
           </div>
-          <Link to="/verify" className="text-sm text-green hover:underline hidden sm:block">
+          <Link to="/verify" className="group relative text-sm text-green hidden sm:inline-block">
             Verify any agent →
+            <span className="absolute bottom-0 left-0 w-full h-px bg-green scale-x-0 origin-right group-hover:scale-x-100 group-hover:origin-left transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]" />
           </Link>
         </motion.div>
 
@@ -333,12 +396,11 @@ export default function Index() {
               ))}
             </ul>
             <Link to="/register"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-amber/40 text-amber hover:bg-amber/10 transition-colors text-sm font-medium">
+              className="group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-amber/40 text-amber hover:bg-amber/10 transition-colors text-sm font-medium">
               Register Indian Business Agent <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
-          {/* TDS Card Mock */}
           <div className="p-6 rounded-xl border border-amber/20 bg-card gradient-card">
             <div className="flex items-center gap-2 mb-5">
               <div className="w-2 h-2 rounded-full bg-amber animate-pulse" />
@@ -451,11 +513,19 @@ export default function Index() {
             <span className="font-semibold text-sm">AgentID</span>
             <span className="text-xs text-muted-foreground font-mono">· KYA Protocol on Solana</span>
           </div>
-          <div className="flex items-center gap-6 text-sm text-muted-foreground">
-            <Link to="/verify" className="hover:text-green transition-colors">Verify</Link>
-            <Link to="/register" className="hover:text-green transition-colors">Register</Link>
-            <Link to="/dashboard" className="hover:text-green transition-colors">Dashboard</Link>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-green transition-colors">GitHub</a>
+          <div className="flex items-center gap-6 text-sm">
+            {[
+              { label: "Verify", href: "/verify" },
+              { label: "Register", href: "/register" },
+              { label: "Dashboard", href: "/dashboard" },
+              { label: "GitHub", href: "https://github.com" },
+            ].map(({ label, href }) => (
+              <Link key={label} to={href}
+                className="group relative text-muted-foreground hover:text-foreground transition-colors">
+                {label}
+                <span className="absolute bottom-0 left-0 w-full h-px bg-foreground scale-x-0 origin-right group-hover:scale-x-100 group-hover:origin-left transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]" />
+              </Link>
+            ))}
           </div>
           <p className="text-xs text-muted-foreground">© 2025 AgentID Protocol. Apache 2.0.</p>
         </div>
