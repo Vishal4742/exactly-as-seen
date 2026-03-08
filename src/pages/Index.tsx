@@ -8,6 +8,7 @@ import { MOCK_AGENTS } from "@/data/mockAgents";
 import AsciiCanvas from "@/components/AsciiCanvas";
 import ScrambleText from "@/components/ScrambleText";
 import CornerTelemetry from "@/components/CornerTelemetry";
+import OnboardingModal from "@/components/OnboardingModal";
 import { useEffect, useState } from "react";
 
 const fadeUp = {
@@ -58,6 +59,7 @@ export default function Index() {
 
   return (
     <div className="bg-background text-foreground">
+      <OnboardingModal />
 
       {/* ═══════════════════════════════════════════
           HERO — full viewport, reference layout
