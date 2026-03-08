@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useWallet } from "@/hooks/useWallet";
 import { MOCK_AGENTS, truncateWallet, formatRelativeTime } from "@/data/mockAgents";
 import { toast } from "sonner";
-import { Zap, Shield, Activity, AlertTriangle, Wallet, ExternalLink, Play, Pause, Plus } from "lucide-react";
+import { Shield, Activity, AlertTriangle, Wallet, ExternalLink, Play, Pause, Plus } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
+import {
+  LineChart, Line, BarChart, Bar, AreaChart, Area,
+  XAxis, YAxis, Tooltip, ResponsiveContainer,
+} from "recharts";
 
 function MiniGauge({ score }: { score: number }) {
   const pct = (score / 1000) * 100;
