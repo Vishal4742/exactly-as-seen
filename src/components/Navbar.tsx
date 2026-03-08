@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useWallet } from "@/hooks/useWallet";
 import { truncateWallet } from "@/data/mockAgents";
-import { Menu, X, Zap, ChevronDown, Copy, LogOut } from "lucide-react";
+import { Menu, X, Copy, LogOut, Zap } from "lucide-react";
 import { toast } from "sonner";
 
 export default function Navbar() {
@@ -21,44 +21,39 @@ export default function Navbar() {
   ];
 
   const handleCopyAddress = () => {
-    if (publicKey) {
-      navigator.clipboard.writeText(publicKey);
-      toast.success("Address copied!");
-    }
+    if (publicKey) { navigator.clipboard.writeText(publicKey); toast.success("Address copied!"); }
     setWalletMenuOpen(false);
   };
-
-  const handleDisconnect = () => {
-    disconnect();
-    setWalletMenuOpen(false);
-    toast("Wallet disconnected");
-  };
+  const handleDisconnect = () => { disconnect(); setWalletMenuOpen(false); toast("Wallet disconnected"); };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/90 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-md bg-green flex items-center justify-center glow-green-sm">
-              <Zap className="w-4 h-4 text-primary-foreground" />
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/95 backdrop-blur-md">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="flex h-14 items-center justify-between">
+
+          {/* Logo — minimal text mark */}
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="w-6 h-6 bg-green flex items-center justify-center">
+              <Zap className="w-3.5 h-3.5 text-primary-foreground" />
             </div>
-            <span className="font-bold text-lg tracking-tight">
-              Agent<span className="text-green">ID</span>
+            <span className="font-mono text-sm font-semibold tracking-tight">
+              AgentID
             </span>
-            <span className="hidden sm:block text-xs font-mono text-muted-foreground border border-border rounded px-1.5 py-0.5 ml-1">
+            <span className="hidden sm:block label-meta border-l border-border pl-3">
               KYA Protocol
             </span>
           </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-6">
+          {/* Desktop nav — pure text links with slide underline */}
+          <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 to={link.href}
-                className={`text-sm font-medium transition-colors hover:text-green ${
-                  location.pathname === link.href ? "text-green" : "text-muted-foreground"
+                className={`link-underline label-meta transition-colors ${
+                  location.pathname === link.href
+                    ? "text-green"
+                    : "hover:text-foreground"
                 }`}
               >
                 {link.label}
@@ -66,59 +61,45 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Wallet Button */}
-          <div className="hidden md:flex items-center gap-3">
-            <Link
-              to="/register"
-              className="text-sm font-medium px-4 py-2 rounded-md border border-green/40 text-green hover:bg-green/10 transition-colors"
-            >
+          {/* Right: Register + Wallet */}
+          <div className="hidden md:flex items-center gap-5">
+            <Link to="/register" className="link-underline label-meta hover:text-green transition-colors">
               Register Agent
             </Link>
+
+            {/* Divider */}
+            <div className="w-px h-4 bg-border" />
 
             {connected ? (
               <div className="relative">
                 <button
                   onClick={() => setWalletMenuOpen(!walletMenuOpen)}
-                  className="flex items-center gap-2 px-3 py-2 rounded-md bg-secondary border border-green/30 text-sm font-mono text-green hover:bg-secondary/80 transition-colors"
+                  className="flex items-center gap-2 font-mono text-xs text-green"
                 >
-                  <div className="w-2 h-2 rounded-full bg-green animate-pulse" />
+                  <div className="w-1.5 h-1.5 bg-green animate-pulse" />
                   {truncateWallet(publicKey!)}
-                  <ChevronDown className="w-3 h-3" />
                 </button>
-
                 <AnimatePresence>
                   {walletMenuOpen && (
                     <motion.div
-                      initial={{ opacity: 0, y: -8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      className="absolute right-0 top-full mt-2 w-52 rounded-lg border border-border bg-card shadow-xl overflow-hidden"
+                      initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
+                      className="absolute right-0 top-full mt-3 w-52 border border-border bg-background shadow-2xl"
                     >
-                      <div className="px-3 py-2 border-b border-border">
-                        <p className="text-xs text-muted-foreground">Connected via {walletProvider}</p>
-                        <p className="text-xs font-mono text-foreground mt-0.5">{truncateWallet(publicKey!)}</p>
+                      <div className="px-4 py-3 border-b border-border">
+                        <p className="label-meta mb-0.5">Connected · {walletProvider}</p>
+                        <p className="font-mono text-xs text-foreground">{truncateWallet(publicKey!)}</p>
                       </div>
-                      <button
-                        onClick={handleCopyAddress}
-                        className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-secondary transition-colors text-left"
-                      >
-                        <Copy className="w-3.5 h-3.5" />
-                        Copy address
+                      <button onClick={handleCopyAddress}
+                        className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs hover:bg-secondary transition-colors text-left">
+                        <Copy className="w-3 h-3" /> Copy address
                       </button>
-                      <Link
-                        to="/dashboard"
-                        onClick={() => setWalletMenuOpen(false)}
-                        className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-secondary transition-colors"
-                      >
-                        <Zap className="w-3.5 h-3.5" />
-                        My Dashboard
+                      <Link to="/dashboard" onClick={() => setWalletMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-2.5 text-xs hover:bg-secondary transition-colors">
+                        <Zap className="w-3 h-3" /> My Dashboard
                       </Link>
-                      <button
-                        onClick={handleDisconnect}
-                        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-secondary transition-colors text-left"
-                      >
-                        <LogOut className="w-3.5 h-3.5" />
-                        Disconnect
+                      <button onClick={handleDisconnect}
+                        className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs text-destructive hover:bg-secondary transition-colors text-left border-t border-border">
+                        <LogOut className="w-3 h-3" /> Disconnect
                       </button>
                     </motion.div>
                   )}
@@ -129,39 +110,26 @@ export default function Navbar() {
                 <button
                   onClick={() => setWalletPickerOpen(!walletPickerOpen)}
                   disabled={connecting}
-                  className="flex items-center gap-2 px-4 py-2 rounded-md bg-green text-primary-foreground text-sm font-semibold hover:bg-green/90 transition-colors disabled:opacity-50 glow-green-sm"
+                  className="btn-primary glow-green-sm"
                 >
                   {connecting ? (
-                    <>
-                      <div className="w-3.5 h-3.5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                      Connecting...
-                    </>
-                  ) : (
-                    "Connect Wallet"
-                  )}
+                    <div className="w-3.5 h-3.5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                  ) : "Connect Wallet"}
                 </button>
-
                 <AnimatePresence>
                   {walletPickerOpen && !connecting && (
                     <motion.div
-                      initial={{ opacity: 0, y: -8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      className="absolute right-0 top-full mt-2 w-52 rounded-lg border border-border bg-card shadow-xl overflow-hidden"
+                      initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
+                      className="absolute right-0 top-full mt-3 w-48 border border-border bg-background shadow-2xl"
                     >
-                      <div className="px-3 py-2 border-b border-border">
-                        <p className="text-xs text-muted-foreground">Select wallet</p>
+                      <div className="px-4 py-2.5 border-b border-border">
+                        <p className="label-meta">Select wallet</p>
                       </div>
                       {(["phantom", "solflare"] as const).map((p) => (
-                        <button
-                          key={p}
-                          onClick={() => { connect(p); setWalletPickerOpen(false); }}
-                          className="w-full flex items-center gap-3 px-3 py-2.5 text-sm hover:bg-secondary transition-colors capitalize text-left"
-                        >
-                          <div className="w-6 h-6 rounded-full bg-secondary border border-border flex items-center justify-center text-xs font-bold">
-                            {p === "phantom" ? "👻" : "☀️"}
-                          </div>
-                          {p === "phantom" ? "Phantom" : "Solflare"}
+                        <button key={p} onClick={() => { connect(p); setWalletPickerOpen(false); }}
+                          className="w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-secondary transition-colors text-left">
+                          <span>{p === "phantom" ? "👻" : "☀️"}</span>
+                          <span className="font-mono text-xs">{p === "phantom" ? "Phantom" : "Solflare"}</span>
                         </button>
                       ))}
                     </motion.div>
@@ -171,12 +139,9 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile menu toggle */}
-          <button
-            className="md:hidden p-2 rounded-md text-muted-foreground hover:text-foreground"
-            onClick={() => setMobileOpen(!mobileOpen)}
-          >
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          {/* Mobile toggle */}
+          <button className="md:hidden p-2 text-muted-foreground hover:text-foreground" onClick={() => setMobileOpen(!mobileOpen)}>
+            {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
         </div>
       </div>
@@ -184,54 +149,37 @@ export default function Navbar() {
       {/* Mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-border bg-background"
-          >
-            <div className="px-4 py-4 space-y-2">
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-t border-border bg-background">
+            <div className="px-6 py-5 space-y-4">
               {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className="block px-3 py-2 rounded-md text-sm text-muted-foreground hover:text-green hover:bg-secondary transition-colors"
-                  onClick={() => setMobileOpen(false)}
-                >
+                <Link key={link.href} to={link.href} onClick={() => setMobileOpen(false)}
+                  className={`block label-meta transition-colors ${location.pathname === link.href ? "text-green" : "hover:text-foreground"}`}>
                   {link.label}
                 </Link>
               ))}
-              <Link
-                to="/register"
-                className="block px-3 py-2 rounded-md text-sm text-green border border-green/30 hover:bg-green/10 transition-colors"
-                onClick={() => setMobileOpen(false)}
-              >
-                Register Agent
-              </Link>
-              {!connected && (
-                <div className="flex gap-2 pt-2">
-                  {(["phantom", "solflare"] as const).map((p) => (
-                    <button
-                      key={p}
-                      onClick={() => { connect(p); setMobileOpen(false); }}
-                      className="flex-1 py-2 text-sm font-medium rounded-md bg-green text-primary-foreground"
-                    >
-                      {p === "phantom" ? "👻 Phantom" : "☀️ Solflare"}
-                    </button>
-                  ))}
-                </div>
-              )}
-              {connected && (
-                <div className="px-3 py-2 rounded-md bg-secondary border border-green/30">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-2 h-2 rounded-full bg-green animate-pulse" />
-                    <span className="text-xs font-mono text-green">{truncateWallet(publicKey!)}</span>
+              <div className="pt-2 border-t border-border">
+                <Link to="/register" onClick={() => setMobileOpen(false)} className="block label-meta text-green mb-4">
+                  Register Agent
+                </Link>
+                {!connected ? (
+                  <div className="flex gap-3">
+                    {(["phantom", "solflare"] as const).map((p) => (
+                      <button key={p} onClick={() => { connect(p); setMobileOpen(false); }}
+                        className="flex-1 py-2 text-xs font-mono bg-green text-primary-foreground">
+                        {p === "phantom" ? "👻 Phantom" : "☀️ Solflare"}
+                      </button>
+                    ))}
                   </div>
-                  <button onClick={handleDisconnect} className="text-xs text-destructive">
-                    Disconnect
-                  </button>
-                </div>
-              )}
+                ) : (
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs text-green flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-green animate-pulse" /> {truncateWallet(publicKey!)}
+                    </span>
+                    <button onClick={handleDisconnect} className="label-meta text-destructive">Disconnect</button>
+                  </div>
+                )}
+              </div>
             </div>
           </motion.div>
         )}
