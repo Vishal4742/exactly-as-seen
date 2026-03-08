@@ -96,14 +96,12 @@ export default function Index() {
         {/* ── Main content: journal list ── */}
         <div className="relative z-20 flex flex-col h-full pt-[calc(var(--nav-h,4rem)+3.5rem)] pb-16 px-6 lg:px-16">
 
-          {/* Grant badge */}
-          <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.5 }}
-            className="mb-8 lg:mb-10">
+          <div className="mb-8 lg:mb-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 border border-green/25 text-green text-[11px] font-mono uppercase tracking-widest">
               <div className="w-1.5 h-1.5 bg-green animate-pulse" />
-              Solana Foundation Grant · KYA Protocol · v0.1 devnet
+              KYA Protocol · v0.1 devnet
             </div>
-          </motion.div>
+          </div>
 
           {/* Hero headline */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25, duration: 0.6 }}
