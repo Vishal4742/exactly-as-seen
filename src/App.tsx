@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import AgentProfile from "./pages/AgentProfile";
 import Dashboard from "./pages/Dashboard";
 import Verify from "./pages/Verify";
+import Agents from "./pages/Agents";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/register" element={<Register />} />
               <Route path="/agent/:id" element={<AgentProfile />} />
+              <Route path="/agents" element={<Agents />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/verify" element={<Verify />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

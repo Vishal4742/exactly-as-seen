@@ -14,6 +14,7 @@ export default function Navbar() {
   const [walletPickerOpen, setWalletPickerOpen] = useState(false);
 
   const navLinks = [
+    { label: "Agents", href: "/agents" },
     { label: "Verify", href: "/verify" },
     { label: "Dashboard", href: "/dashboard" },
     { label: "Docs", href: "#docs" },
