@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 /** Animated pulse rectangle matching the editorial dark theme */
-export function Sk({ className }: { className?: string }) {
+export function Sk({ className, style }: { className?: string; style?: React.CSSProperties }) {
   return (
     <div
       className={cn(
