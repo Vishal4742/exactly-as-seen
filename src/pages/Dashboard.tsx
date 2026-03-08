@@ -114,68 +114,103 @@ export default function Dashboard() {
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* My Agents */}
+          {/* My Agents — journal-list style */}
           <div className="lg:col-span-2">
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-              <h2 className="text-lg font-bold mb-4">My Agents</h2>
-              <div className="space-y-4">
+              {/* Journal header */}
+              <div className="flex justify-between items-baseline border-b border-border pb-3 mb-2">
+                <span className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground/60 font-medium select-none">
+                  Index / My Agents
+                </span>
+                <span className="font-mono text-[11px] text-muted-foreground/40">
+                  {userAgents.length} registered
+                </span>
+              </div>
+
+              <ul>
                 {userAgents.map((agent, i) => {
                   const isPaused = pausedAgents.has(agent.id);
+                  const previewText = `${agent.framework} · ${agent.llmModel} · ${agent.totalTxValue} · last active ${formatRelativeTime(agent.lastActive)}`;
                   return (
-                    <motion.div key={agent.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.1 + i * 0.08 }}
-                      className={`p-5 rounded-xl border transition-colors ${isPaused ? "border-destructive/30 bg-destructive/5" : "border-border bg-card hover:border-green/20"}`}>
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green/20 to-blue-accent/20 border border-border flex items-center justify-center font-mono font-bold text-green text-sm shrink-0">
-                          {agent.name.slice(0, 2).toUpperCase()}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap mb-1">
-                            <h3 className="font-semibold font-mono">{agent.name}</h3>
-                            <span className={`text-xs px-2 py-0.5 rounded-full border ${
-                              agent.verifiedLevel === "Audited" ? "border-green/30 text-green bg-green/10" :
-                              agent.verifiedLevel === "KYB" ? "border-blue-accent/30 text-blue-accent bg-blue-accent/10" :
-                              "border-border text-muted-foreground"
-                            }`}>{agent.verifiedLevel}</span>
-                            {isPaused && <span className="text-xs px-2 py-0.5 rounded-full border border-destructive/30 text-destructive bg-destructive/10">PAUSED</span>}
-                          </div>
-                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground mb-3">
-                            <span>{agent.framework} · {agent.llmModel}</span>
-                            <span>Last active: <span className="text-green">{formatRelativeTime(agent.lastActive)}</span></span>
-                            <span>{agent.totalTxValue} total</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <MiniGauge score={agent.reputationScore} />
-                          <div className="text-right">
-                            <div className="text-sm font-bold font-mono text-green">{agent.reputationScore}</div>
-                            <div className="text-xs text-muted-foreground">/1000</div>
-                          </div>
-                        </div>
-                      </div>
+                    <motion.li key={agent.id}
+                      initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 + i * 0.07 }}
+                      className="group"
+                    >
+                      <div
+                        className="grid items-baseline py-5 border-b transition-colors duration-300"
+                        style={{
+                          gridTemplateColumns: "96px 1fr auto",
+                          borderColor: isPaused ? "hsl(var(--destructive)/0.3)" : "hsl(var(--border))",
+                        }}
+                        onMouseEnter={(e) => {
+                          (e.currentTarget as HTMLDivElement).style.borderColor = isPaused
+                            ? "hsl(var(--destructive)/0.6)"
+                            : "hsl(var(--foreground)/0.35)";
+                        }}
+                        onMouseLeave={(e) => {
+                          (e.currentTarget as HTMLDivElement).style.borderColor = isPaused
+                            ? "hsl(var(--destructive)/0.3)"
+                            : "hsl(var(--border))";
+                        }}
+                      >
+                        {/* Date */}
+                        <span className="font-mono text-[11px] text-muted-foreground/50 select-none">
+                          {new Date(agent.registeredAt).toLocaleDateString("en-GB", {
+                            year: "numeric", month: "2-digit", day: "2-digit",
+                          }).replace(/\//g, ".")}
+                        </span>
 
-                      <div className="flex gap-2 mt-4">
-                        <Link to={`/agent/${agent.id}`}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-border text-xs hover:bg-secondary transition-colors">
-                          <ExternalLink className="w-3 h-3" /> View Profile
-                        </Link>
-                        <button onClick={() => togglePause(agent.id, agent.name)}
-                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-xs transition-colors ${
-                            isPaused
-                              ? "border-green/40 text-green bg-green/10 hover:bg-green/20"
-                              : "border-destructive/40 text-destructive hover:bg-destructive/10"
-                          }`}>
-                          {isPaused ? <><Play className="w-3 h-3" /> Resume</> : <><Pause className="w-3 h-3" /> Emergency Pause</>}
-                        </button>
-                        <button onClick={() => toast("Coming soon: spending limit editor")}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-border text-xs hover:bg-secondary transition-colors ml-auto">
-                          <Settings className="w-3 h-3" /> Limits
-                        </button>
+                        {/* Agent name + preview */}
+                        <div className="min-w-0">
+                          <span
+                            className={`font-serif italic text-xl sm:text-2xl tracking-tight transition-transform duration-300 ease-out group-hover:translate-x-2.5 inline-block ${
+                              isPaused ? "text-destructive/70" : "text-foreground"
+                            }`}
+                            style={{ fontFamily: "Georgia, serif" }}
+                          >
+                            {agent.name}
+                            {agent.verifiedLevel !== "Unverified" && (
+                              <span className={`ml-2 text-sm not-italic font-sans font-medium ${
+                                agent.verifiedLevel === "Audited" ? "text-green/60" : "text-blue-accent/60"
+                              }`}>
+                                · {agent.verifiedLevel}
+                              </span>
+                            )}
+                            {isPaused && (
+                              <span className="ml-2 text-xs not-italic font-mono text-destructive/70">PAUSED</span>
+                            )}
+                          </span>
+                          <div className="font-mono text-[10px] text-muted-foreground/40 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            {previewText}
+                          </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex items-center gap-1.5 ml-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          <MiniGauge score={agent.reputationScore} />
+                          <div className="text-right mr-2">
+                            <div className="text-xs font-bold font-mono text-green">{agent.reputationScore}</div>
+                            <div className="text-[10px] text-muted-foreground">/1000</div>
+                          </div>
+                          <Link to={`/agent/${agent.id}`}
+                            className="p-1.5 rounded border border-border hover:bg-secondary transition-colors">
+                            <ExternalLink className="w-3 h-3" />
+                          </Link>
+                          <button onClick={() => togglePause(agent.id, agent.name)}
+                            className={`p-1.5 rounded border transition-colors ${
+                              isPaused
+                                ? "border-green/40 text-green hover:bg-green/10"
+                                : "border-destructive/40 text-destructive hover:bg-destructive/10"
+                            }`}>
+                            {isPaused ? <Play className="w-3 h-3" /> : <Pause className="w-3 h-3" />}
+                          </button>
+                        </div>
                       </div>
-                    </motion.div>
+                    </motion.li>
                   );
                 })}
-              </div>
+              </ul>
             </motion.div>
           </div>
 
