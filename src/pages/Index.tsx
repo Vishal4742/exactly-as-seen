@@ -8,6 +8,7 @@ import { MOCK_AGENTS } from "@/data/mockAgents";
 import AsciiCanvas from "@/components/AsciiCanvas";
 import ScrambleText from "@/components/ScrambleText";
 import CornerTelemetry from "@/components/CornerTelemetry";
+import OnboardingModal from "@/components/OnboardingModal";
 import { useEffect, useState } from "react";
 
 const fadeUp = {
