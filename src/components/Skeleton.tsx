@@ -8,6 +8,7 @@ export function Sk({ className, style }: { className?: string; style?: React.CSS
         "bg-secondary/60 animate-pulse rounded-none",
         className
       )}
+      style={style}
     />
   );
 }
