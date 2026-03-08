@@ -435,9 +435,9 @@ export default function Index() {
             className="mb-14">
             <span className="label-meta">Roadmap</span>
             <h2 className="font-serif italic text-4xl sm:text-5xl mt-3 leading-tight tracking-[-0.02em]">
-              Grant Roadmap
+              Roadmap
             </h2>
-            <p className="text-muted-foreground text-sm mt-2">Solana Foundation Hackathon — 5-week build plan</p>
+            <p className="text-muted-foreground text-sm mt-2">5-week build plan</p>
           </motion.div>
 
           <div className="divide-y divide-border">
