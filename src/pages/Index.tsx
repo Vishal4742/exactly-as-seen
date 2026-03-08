@@ -125,6 +125,7 @@ export default function Index() {
           <div className="flex flex-col justify-between">
             <ul className="space-y-2">
               {[
+                { label: "Browse registered agents", href: "/agents" },
                 { label: "Verify any agent", href: "/verify" },
                 { label: "Owner Dashboard", href: "/dashboard" },
                 { label: "View on GitHub", href: "https://github.com" },
