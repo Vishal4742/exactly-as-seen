@@ -133,6 +133,71 @@ export default function Dashboard() {
           ))}
         </div>
 
+        {/* ── Analytics Charts ── */}
+        <div className="border-b border-border py-8">
+          <p className="label-meta mb-6">Analytics · Last 30 days</p>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 border border-border divide-y lg:divide-y-0 lg:divide-x divide-border">
+
+            {/* Reputation Over Time */}
+            <div className="p-5">
+              <p className="label-meta mb-1">Reputation Over Time</p>
+              <p className="font-mono text-xs text-muted-foreground/50 mb-4">30-day score trend</p>
+              <ResponsiveContainer width="100%" height={200}>
+                <LineChart data={reputationData} margin={{ top: 4, right: 4, left: -28, bottom: 0 }}>
+                  <XAxis dataKey="date" tick={{ fontSize: 9, fontFamily: "JetBrains Mono, monospace", fill: "hsl(215 12% 35%)" }}
+                    tickLine={false} axisLine={false} interval={7} />
+                  <YAxis tick={{ fontSize: 9, fontFamily: "JetBrains Mono, monospace", fill: "hsl(215 12% 35%)" }}
+                    tickLine={false} axisLine={false} domain={["auto", "auto"]} />
+                  <Tooltip {...CHART_TOOLTIP_STYLE} formatter={(v: number) => [v, "score"]} />
+                  <Line type="monotone" dataKey="score" stroke="hsl(152 100% 50%)"
+                    strokeWidth={1.5} dot={false} activeDot={{ r: 3, fill: "hsl(152 100% 50%)", strokeWidth: 0 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Daily Transactions */}
+            <div className="p-5">
+              <p className="label-meta mb-1">Daily Transactions</p>
+              <p className="font-mono text-xs text-muted-foreground/50 mb-4">14-day count</p>
+              <ResponsiveContainer width="100%" height={200}>
+                <BarChart data={transactionData} margin={{ top: 4, right: 4, left: -28, bottom: 0 }} barSize={10}>
+                  <XAxis dataKey="date" tick={{ fontSize: 9, fontFamily: "JetBrains Mono, monospace", fill: "hsl(215 12% 35%)" }}
+                    tickLine={false} axisLine={false} interval={3} />
+                  <YAxis tick={{ fontSize: 9, fontFamily: "JetBrains Mono, monospace", fill: "hsl(215 12% 35%)" }}
+                    tickLine={false} axisLine={false} />
+                  <Tooltip {...CHART_TOOLTIP_STYLE} formatter={(v: number) => [v, "txns"]} />
+                  <Bar dataKey="txns" fill="hsl(211 100% 60%)" radius={0}
+                    activeBar={{ fill: "hsl(211 100% 70%)" }} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* USDC Volume */}
+            <div className="p-5">
+              <p className="label-meta mb-1">USDC Volume</p>
+              <p className="font-mono text-xs text-muted-foreground/50 mb-4">30-day cumulative</p>
+              <ResponsiveContainer width="100%" height={200}>
+                <AreaChart data={volumeData} margin={{ top: 4, right: 4, left: -28, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="volumeGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%"  stopColor="hsl(265 89% 67%)" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="hsl(265 89% 67%)" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="date" tick={{ fontSize: 9, fontFamily: "JetBrains Mono, monospace", fill: "hsl(215 12% 35%)" }}
+                    tickLine={false} axisLine={false} interval={7} />
+                  <YAxis tick={{ fontSize: 9, fontFamily: "JetBrains Mono, monospace", fill: "hsl(215 12% 35%)" }}
+                    tickLine={false} axisLine={false} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} />
+                  <Tooltip {...CHART_TOOLTIP_STYLE} formatter={(v: number) => [`$${v.toLocaleString()}`, "USDC"]} />
+                  <Area type="monotone" dataKey="usdc" stroke="hsl(265 89% 67%)" strokeWidth={1.5}
+                    fill="url(#volumeGrad)" dot={false} activeDot={{ r: 3, fill: "hsl(265 89% 67%)", strokeWidth: 0 }} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+
+          </div>
+        </div>
+
         <div className="grid lg:grid-cols-3 gap-0">
           {/* ── Agent journal list ── */}
           <div className="lg:col-span-2 lg:pr-10 lg:border-r border-border py-10">
